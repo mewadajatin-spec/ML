@@ -1,0 +1,56 @@
+import numpy as np
+
+# Define OR gate inputs and outputs
+X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+y = np.array([0, 1, 1, 1])
+
+
+# Perceptron Class
+class Perceptron:
+    def __init__(self, learning_rate=0.1, n_iters=10):
+        self.lr = learning_rate
+        self.n_iters = n_iters
+        self.weights = None
+        self.bias = None
+
+    def activation_func(self, x):
+        return np.where(x >= 0, 1, 0)
+
+    def fit(self, X, y):
+        n_samples, n_features = X.shape
+
+        # Initialize weights and bias
+        self.weights = np.zeros(n_features)
+        self.bias = 0
+
+        for _ in range(self.n_iters):
+            for idx, x_i in enumerate(X):
+                linear_output = np.dot(x_i, self.weights) + self.bias
+                y_predicted = self.activation_func(linear_output)
+
+                # update weights and bias
+                update = self.lr * (y[idx] - y_predicted)
+                self.weights += update * x_i
+                self.bias += update
+
+    def predict(self, X):
+        linear_output = np.dot(X, self.weights) + self.bias
+        y_predicted = self.activation_func(linear_output)
+        return y_predicted
+
+
+# Training the Perceptron
+perceptron = Perceptron(learning_rate=0.1, n_iters=10)
+perceptron.fit(X, y)
+
+# Testing the OR gate
+predictions = perceptron.predict(X)
+
+# Displaying Results
+print("\nOR Gate Results:")
+for i in range(len(X)):
+    print(f"Input: {X[i]} -> Predicted Output: {predictions[i]} (Actual: {y[i]})")
+
+# Verifying if the perceptron learned the OR gate correctly
+accuracy = np.sum(predictions == y) / len(y)
+print(f"\nAccuracy: {accuracy * 100:.2f}%")

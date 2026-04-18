@@ -1,0 +1,32 @@
+import numpy as np
+x=np.array([.50,1.50,2,4.25,3.25,5.5]).reshape((-1,1))
+y=np.array([0,0,0,1,1,1])
+x_mean=np.mean(x)
+y_mean=np.mean(y)
+n=len(x)
+
+class LogisticRegression:
+    b0=0
+    b1=0
+    def fit(self,x,y):
+        up_function=0
+        down_function=0
+        for i in range(n):
+            up_function += (x[i]-x_mean)*(y[i]-y_mean)
+            down_function += (x[i]-x_mean)**2
+        self.b1=up_function/down_function
+        self.b0=y_mean-(self.b1*x_mean)
+        return self.b0,self.b1
+    
+    def predict(self,x_value):
+        z=self.b0+(self.b1*x_value)
+        sigmoid=1/(1+np.exp(-z))
+        if sigmoid>=0.5:
+            y_pred=1
+        else:
+            y_pred=0
+        return sigmoid,y_pred
+
+model=LogisticRegression()
+print(model.fit(x,y))
+print(model.predict(2.7))

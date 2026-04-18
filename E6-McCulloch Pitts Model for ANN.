@@ -1,0 +1,75 @@
+def mcculloch_pitts_nueron(inputs, weights, thresholds):
+    weighted_sum = sum(i * w for i, w in zip(inputs, weights))
+    return 1 if weighted_sum >= thresholds else 0
+
+
+inputs = [1, 0, 1]
+weights = [1, 1, 1]
+threshold = 2
+
+output = mcculloch_pitts_nueron(inputs, weights, threshold)
+print(f"Nueron output : {output}")
+
+
+def and_gate(x1, x2):
+    return mcculloch_pitts_nueron([x1, x2], [1, 1], 2)
+
+
+print(f"AND(0,0): {and_gate(0, 0)}")
+print(f"AND(0,1): {and_gate(0, 1)}")
+print(f"AND(1,0): {and_gate(1, 0)}")
+print(f"AND(1,1): {and_gate(1, 1)}")
+
+
+def or_gate(x1, x2):
+    return mcculloch_pitts_nueron([x1, x2], [1, 1], 1)
+
+
+print(f"OR(0,0): {or_gate(0, 0)}")
+print(f"OR(0,1): {or_gate(0, 1)}")
+print(f"OR(1,0): {or_gate(1, 0)}")
+print(f"OR(1,1): {or_gate(1, 1)}")
+
+
+def not_gate(x):
+    return mcculloch_pitts_nueron([x], [-1], 0)
+
+
+# Testing Not Gate
+print(f"NOT(0): {not_gate(0)}")
+print(f"NOT(1): {not_gate(1)}")
+
+
+def nand_gate(x1, x2):
+    return not_gate(and_gate(x1, x2))
+
+
+def nor_gate(x1, x2):
+    return not_gate(or_gate(x1, x2))
+
+
+# Testing NAND Gate
+print(f"NAND(0,0): {nand_gate(0, 0)}")
+print(f"NAND(0,1): {nand_gate(0, 1)}")
+print(f"NAND(1,0): {nand_gate(1, 0)}")
+print(f"NAND(1,1): {nand_gate(1, 1)}")
+
+
+# Testing NOR Gate
+print(f"NOR(0,0): {nor_gate(0, 0)}")
+print(f"NOR(0,1): {nor_gate(0, 1)}")
+print(f"NOR(1,0): {nor_gate(1, 0)}")
+print(f"NOR(1,1): {nor_gate(1, 1)}")
+
+
+def xor_gate(x1, x2):
+    or_result = or_gate(x1, x2)
+    nand_result = nand_gate(x1, x2)
+    return and_gate(or_result, nand_result)
+
+
+# Testing XOR Gate
+print(f"XOR(0,0): {xor_gate(0, 0)}")
+print(f"XOR(0,1): {xor_gate(0, 1)}")
+print(f"XOR(1,0): {xor_gate(1, 0)}")
+print(f"XOR(1,1): {xor_gate(1, 1)}")

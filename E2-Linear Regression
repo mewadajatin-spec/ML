@@ -1,0 +1,34 @@
+import numpy as np import
+matplotlib.pyplot as plt
+# data
+X_data = np.array([160, 171, 182, 180, 154]).reshape((5, 1))
+Y_data = np.array([72, 76, 77, 83, 76])
+x_mean =
+np.mean(X_data) y_mean =
+np.mean(Y_data) n =
+len(X_data)
+class
+LinearRegression:
+def LinearRegression_fit(self, x, y):
+upward_function = 0
+X_downward = 0
+for i in
+range(n):
+upward_function += (x[i] - x_mean) * (y[i] - y_mean)
+X_downward += (x[i] - x_mean) ** 2
+self.b1 = upward_function /
+X_downward self.b0 = y_mean - (self.b1
+* x_mean) return self.b0, self.b1
+def LinearRegression_predict(self,
+Xi): return (self.b0 + (self.b1 *
+Xi))
+# create and train model model = LinearRegression()
+print("b0, b1 =", model.LinearRegression_fit(X_data, Y_data))
+
+# Prediction print("Prediction for X = 176:",
+model.LinearRegression_predict(176)) # Plot y_pred_line = model.b0 +
+model.b1 * X_data
+plt.scatter(X_data, Y_data, label='Actual data') plt.plot(X_data,
+y_pred_line, linewidth=3, label='Regression Line') plt.xlabel("X")
+plt.ylabel("y") plt.title("Linear Regression") plt.legend()
+plt.show()

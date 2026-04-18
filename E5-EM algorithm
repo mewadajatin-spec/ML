@@ -1,0 +1,48 @@
+import numpy as np
+
+# 1. Setup
+data = np.array([5, 9, 8, 4, 7])
+n_flips = 10
+max_iters = 10
+
+# INITIAL THETAS (Must be outside the loop to update)
+theta_A = 0.6
+theta_B = 0.5
+
+# 2. EM Algorithm Loop
+for iteration in range(max_iters):
+    print(f"\nIteration: ", {iteration + 1})
+    print("-------------------------")
+    
+    # E-Step: Calculate weights based on current thetas
+    weight_A = []
+    weight_B = []
+    
+    for heads in data:
+        likelihood_A = theta_A**heads * (1 - theta_A)**(n_flips - heads)
+        likelihood_B = theta_B**heads * (1 - theta_B)**(n_flips - heads)
+
+        total = likelihood_A + likelihood_B
+        prob_A = likelihood_A / total
+        prob_B = likelihood_B / total
+
+        weight_A.append(prob_A)
+        weight_B.append(prob_B)
+
+    weight_A = np.array(weight_A)
+    weight_B = np.array(weight_B)
+
+    print("p(A|Data):", np.round(weight_A, 3))
+    print("p(B|Data):", np.round(weight_B, 3))
+
+    # M-step: Update thetas for the NEXT iteration
+    theta_A = np.sum(weight_A * data) / (np.sum(weight_A) * n_flips)
+    theta_B = np.sum(weight_B * data) / (np.sum(weight_B) * n_flips)
+
+    print("Updated theta_A:", round(theta_A, 4))
+    print("Updated theta_B:", round(theta_B, 4))
+
+# 3. Final Output
+print("\nFinal Estimates")
+print("Theta A =", round(theta_A, 4))
+print("Theta B =", round(theta_B, 4))
